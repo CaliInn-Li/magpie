@@ -3,7 +3,8 @@ package provider
 import (
 	"fmt"
 	"slices"
-	"strings"\n\t"time"
+	"strings"
+	"time"
 
 	"github.com/yetone/magpie/internal/settings"
 )
