@@ -18,7 +18,7 @@ func BusinessFastActive(now time.Time) bool {
 }
 
 func businessFastActive(now time.Time, logins []Login) bool {
-	if !now.Before(BusinessFastUntil) {
+	if !now.Before(businessFastDeadline()) {
 		return false
 	}
 	for _, login := range logins {
