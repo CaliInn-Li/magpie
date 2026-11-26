@@ -14,10 +14,14 @@ var BusinessFastUntil = time.Date(2026, 12, 31, 23, 59, 59, 0, time.UTC)
 // Business plan account during the promotion window. Unknown plans and
 // expired windows are deliberately false.
 func BusinessFastActive(now time.Time) bool {
+	return businessFastActive(now, Logins("codex"))
+}
+
+func businessFastActive(now time.Time, logins []Login) bool {
 	if !now.Before(BusinessFastUntil) {
 		return false
 	}
-	for _, login := range Logins("codex") {
+	for _, login := range logins {
 		if !login.Active && !login.On {
 			continue
 		}
