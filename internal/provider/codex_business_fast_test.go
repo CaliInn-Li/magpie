@@ -29,3 +29,14 @@ func TestBusinessFastActive(t *testing.T) {
 		})
 	}
 }
+
+func TestBusinessFastDeadlineOverride(t *testing.T) {
+	t.Setenv("MAGPIE_CODEX_BUSINESS_FAST_UNTIL", "2027-01-15T00:00:00Z")
+	if got := businessFastDeadline(); !got.Equal(time.Date(2027, 1, 15, 0, 0, 0, 0, time.UTC)) {
+		t.Fatalf("businessFastDeadline() = %v", got)
+	}
+	t.Setenv("MAGPIE_CODEX_BUSINESS_FAST_UNTIL", "not-a-date")
+	if got := businessFastDeadline(); !got.Equal(BusinessFastUntil) {
+		t.Fatalf("invalid override = %v, want %v", got, BusinessFastUntil)
+	}
+}
