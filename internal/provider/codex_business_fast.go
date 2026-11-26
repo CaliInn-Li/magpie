@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"os"
 	"strings"
 	"time"
 )
@@ -9,6 +10,17 @@ import (
 // promotion. It is kept as a variable so tests and a future settings surface
 // can replace the date without changing routing code.
 var BusinessFastUntil = time.Date(2026, 12, 31, 23, 59, 59, 0, time.UTC)
+
+// businessFastDeadline allows a deployment to update the promotion end
+// without rebuilding. Invalid or absent values use the safe compiled default.
+func businessFastDeadline() time.Time {
+	if raw := strings.TrimSpace(os.Getenv("MAGPIE_CODEX_BUSINESS_FAST_UNTIL")); raw != "" {
+		if deadline, err := time.Parse(time.RFC3339, raw); err == nil {
+			return deadline
+		}
+	}
+	return BusinessFastUntil
+}
 
 // BusinessFastActive reports whether a remembered, active Codex account is a
 // Business plan account during the promotion window. Unknown plans and
