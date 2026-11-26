@@ -3,7 +3,7 @@ package provider
 import (
 	"fmt"
 	"slices"
-	"strings"
+	"strings"\n\t"time"
 
 	"github.com/yetone/magpie/internal/settings"
 )
@@ -16,6 +16,11 @@ func CodexServiceTier() string {
 	v := strings.TrimSpace(heldSettings().CodexServiceTier)
 	if !slices.Contains(settings.CodexServiceTiers, v) {
 		return ""
+	}
+	// An explicit standard/priority/ultrafast choice is a manual override.
+	// Only the unset value participates in the Business promotion detector.
+	if v == "" && BusinessFastActive(time.Now()) {
+		return "priority"
 	}
 	return v
 }
